@@ -1,2 +1,5 @@
 .DS_Store
 assets/frames/marche-round-logo.png
+# 配布終了（2026-11-09）。元に戻すときは下の2行を消し、index-frame.html を index.html に戻す
+index-frame.html
+assets/frames/frame2.png

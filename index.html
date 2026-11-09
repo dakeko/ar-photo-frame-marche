@@ -3,255 +3,34 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>つなぐマルシェ フォトフレーム</title>
+<meta name="robots" content="noindex">
+<title>つなぐマルシェ フォトフレーム（終了しました）</title>
 <style>
-  :root { --bar: 148px; --accent: #c8102e; }
-  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html, body { margin: 0; height: 100%; background: #000; color: #fff;
+  :root { --bg: #fbf3e4; --card: #fffaf1; --ink: #4a3426; --muted: #7a6355; --accent: #c8102e; --line: #ead8bd; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #221a14; --card: #2d231b; --ink: #f4e8d8; --muted: #c9b6a3; --accent: #ff6b6b; --line: #4a3a2d; }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; }
+  body { min-height: 100dvh; display: flex; align-items: center; justify-content: center; padding: 24px 16px;
+    background: var(--bg); color: var(--ink);
     font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", sans-serif; }
-  body { display: flex; flex-direction: column; align-items: center; height: 100dvh; overflow: hidden; }
-
-  /* 画面に収まる範囲で 9:16 を保つ（枠と保存写真の見え方を揃えるため） */
-  #stage { position: relative; flex: none; overflow: hidden; background: #111;
-    width: min(100vw, calc((100dvh - var(--bar)) * 9 / 16)); aspect-ratio: 9 / 16; }
-  #stage video, #stage .frame, #result { position: absolute; inset: 0; width: 100%; height: 100%; }
-  #stage video { object-fit: cover; }
-  #stage video.mirror { transform: scaleX(-1); }
-  #stage .frame { pointer-events: none; }
-  #result { object-fit: contain; background: #000; -webkit-touch-callout: default; }
-  #flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; transition: opacity .25s; }
-  #flash.on { opacity: .9; transition: none; }
-
-  #message { position: absolute; inset: 0; display: flex; flex-direction: column; gap: 16px;
-    align-items: center; justify-content: center; padding: 24px; text-align: center; line-height: 1.7;
-    background: rgba(0,0,0,.45); }
-
-  #bar { flex: 1; width: 100%; min-height: var(--bar); display: flex; flex-direction: column;
-    align-items: center; justify-content: center; gap: 10px; padding: 8px 16px calc(8px + env(safe-area-inset-bottom)); }
-  .row { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; max-width: 420px; }
-
-  button { font: inherit; color: inherit; border: 0; cursor: pointer; }
-  button:disabled { opacity: .4; cursor: default; }
-  button:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
-  .primary, .secondary { min-height: 48px; padding: 0 20px; border-radius: 999px; font-weight: 600; flex: 1; }
-  .primary { background: var(--accent); }
-  .secondary { background: #2b2b2b; }
-  #start { flex: none; }
-
-  #shutter { width: 72px; height: 72px; border-radius: 50%; background: #fff; border: 4px solid #000; box-shadow: 0 0 0 3px #fff; flex: none; }
-  #shutter:active { transform: scale(.94); }
-  .side { width: 72px; flex: none; display: flex; justify-content: center; }
-  #flip { width: 48px; height: 48px; border-radius: 50%; background: #2b2b2b; font-size: 12px; }
-
-  #thumbs { display: flex; gap: 8px; overflow-x: auto; max-width: 100%; }
-  #thumbs button { flex: none; width: 36px; height: 64px; padding: 0; border-radius: 4px; background: #333 center / cover no-repeat; border: 2px solid transparent; }
-  #thumbs button[aria-pressed="true"] { border-color: #fff; }
-  #hint { margin: 0; font-size: 12px; color: #bbb; }
-  [hidden] { display: none !important; }
+  main { width: 100%; max-width: 420px; padding: 40px 24px; text-align: center; line-height: 1.9;
+    background: var(--card); border: 1px solid var(--line); border-radius: 20px; }
+  .leaf { font-size: 40px; line-height: 1; margin-bottom: 16px; }
+  .event { margin: 0 0 8px; font-size: 14px; color: var(--muted); }
+  h1 { margin: 0 0 24px; font-size: 22px; line-height: 1.6; }
+  p { margin: 0; font-size: 16px; }
+  .thanks { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--line); color: var(--accent); font-weight: 600; }
 </style>
 </head>
 <body>
-  <main id="stage">
-    <video id="video" playsinline muted></video>
-    <img id="frame" class="frame" alt="">
-    <img id="result" alt="撮影した写真" hidden>
-    <div id="flash"></div>
-    <div id="message">
-      <p id="messageText">カメラを使って、フレーム付きの写真を撮影します。</p>
-      <button id="start" class="primary">カメラを起動</button>
-    </div>
+  <main>
+    <div class="leaf" aria-hidden="true">🍁</div>
+    <p class="event">LINK 千葉つなぐマルシェ（2026.11.8）</p>
+    <h1>フォトフレームの配布は<br>終了しました</h1>
+    <p>たくさんのご利用、<br>ありがとうございました。</p>
+    <p class="thanks">ご来場いただき、ありがとうございました！</p>
   </main>
-
-  <div id="bar">
-    <div id="thumbs" hidden></div>
-    <div id="cameraControls" class="row" hidden>
-      <div class="side"></div>
-      <button id="shutter" aria-label="撮影" disabled></button>
-      <div class="side"><button id="flip">切替</button></div>
-    </div>
-    <div id="resultControls" class="row" hidden>
-      <button id="retake" class="secondary">撮り直す</button>
-      <button id="save" class="secondary">保存</button>
-      <button id="share" class="primary" hidden>共有</button>
-    </div>
-    <p id="hint" hidden>保存できないときは、写真を長押ししてください</p>
-  </div>
-
-<script>
-// フレームの追加：assets/frames に透過PNG（9:16）を入れて、ここに1行足すだけです
-const FRAMES = [
-  { name: 'フレーム', src: 'assets/frames/frame2.png' },
-];
-const OUTPUT_WIDTH = 1152, OUTPUT_HEIGHT = 2048;
-
-const $ = id => document.getElementById(id);
-const video = $('video'), frame = $('frame'), result = $('result');
-let stream = null, facing = 'user', photoBlob = null, photoUrl = null, frameReady = false;
-
-function showMessage(text, canRetry) {
-  $('messageText').textContent = text;
-  $('start').hidden = !canRetry;
-  $('message').hidden = false;
-}
-
-function selectFrame(index) {
-  frameReady = false;
-  updateShutter();
-  frame.src = FRAMES[index].src;
-  [...$('thumbs').children].forEach((b, i) => b.setAttribute('aria-pressed', String(i === index)));
-}
-frame.addEventListener('load', () => { frameReady = true; updateShutter(); });
-frame.addEventListener('error', () => showMessage('フレーム画像を読み込めませんでした。', false));
-
-function updateShutter() {
-  $('shutter').disabled = !(frameReady && stream && video.videoWidth > 0);
-}
-
-async function startCamera(wanted) {
-  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-    showMessage('この環境ではカメラを使えません。https で公開したページを、Safari または Chrome で開いてください。', false);
-    return false;
-  }
-  // カメラを同時に2つ開けない機種があるので、先に今のカメラを閉じる
-  if (stream) stream.getTracks().forEach(t => t.stop());
-  stream = null;
-  video.srcObject = null;
-  updateShutter();
-
-  // 機種によっては解像度などの指定で失敗するので、条件を緩めながら試す
-  const attempts = [
-    { facingMode: { ideal: wanted }, width: { ideal: 1920 }, height: { ideal: 1080 } },
-    { facingMode: { ideal: wanted } },
-    true,
-  ];
-  let next = null, lastError = null;
-  for (const videoConstraints of attempts) {
-    try {
-      next = await navigator.mediaDevices.getUserMedia({ audio: false, video: videoConstraints });
-      break;
-    } catch (err) {
-      lastError = err;
-      if (err.name === 'NotAllowedError' || err.name === 'SecurityError') break; // 許可の問題は再試行しても直らない
-    }
-  }
-  if (!next) {
-    const name = lastError.name;
-    const denied = name === 'NotAllowedError' || name === 'SecurityError';
-    const missing = name === 'NotFoundError' || name === 'OverconstrainedError';
-    const busy = name === 'NotReadableError' || name === 'AbortError';
-    showMessage((denied
-      ? 'カメラの使用が許可されていません。ブラウザの設定で許可してから、もう一度お試しください。'
-      : missing ? 'カメラが見つかりませんでした。'
-      : busy ? 'カメラを開けませんでした。カメラを使っている他のアプリを閉じてから、もう一度お試しください。'
-      : 'カメラを起動できませんでした。もう一度お試しください。') + `（${name}）`, !missing);
-    return false;
-  }
-
-  stream = next;
-  facing = next.getVideoTracks()[0].getSettings().facingMode || wanted;
-  video.srcObject = next;
-  video.classList.toggle('mirror', facing !== 'environment');
-  try {
-    await video.play();
-  } catch (err) {
-    showMessage(`カメラの映像を再生できませんでした。もう一度お試しください。（${err.name}）`, true);
-    return false;
-  }
-  $('message').hidden = true;
-  $('cameraControls').hidden = false;
-  $('thumbs').hidden = FRAMES.length < 2;
-  updateShutter();
-  return true;
-}
-
-function capture() {
-  const canvas = document.createElement('canvas');
-  canvas.width = OUTPUT_WIDTH;
-  canvas.height = OUTPUT_HEIGHT;
-  const ctx = canvas.getContext('2d');
-
-  // 画面の object-fit: cover と同じ範囲を切り抜く
-  const vw = video.videoWidth, vh = video.videoHeight;
-  const scale = Math.max(OUTPUT_WIDTH / vw, OUTPUT_HEIGHT / vh);
-  const sw = OUTPUT_WIDTH / scale, sh = OUTPUT_HEIGHT / scale;
-  const sx = (vw - sw) / 2, sy = (vh - sh) / 2;
-
-  ctx.save();
-  if (video.classList.contains('mirror')) { ctx.translate(OUTPUT_WIDTH, 0); ctx.scale(-1, 1); }
-  ctx.drawImage(video, sx, sy, sw, sh, 0, 0, OUTPUT_WIDTH, OUTPUT_HEIGHT);
-  ctx.restore();
-  ctx.drawImage(frame, 0, 0, OUTPUT_WIDTH, OUTPUT_HEIGHT); // 文字が反転しないよう、枠は反転させない
-
-  canvas.toBlob(blob => {
-    if (!blob) { showMessage('写真を作成できませんでした。', true); return; }
-    photoBlob = blob;
-    if (photoUrl) URL.revokeObjectURL(photoUrl);
-    photoUrl = URL.createObjectURL(blob);
-    result.src = photoUrl;
-    result.hidden = false;
-    $('cameraControls').hidden = true;
-    $('thumbs').hidden = true;
-    $('resultControls').hidden = false;
-    $('hint').hidden = false;
-    const canShare = navigator.canShare && navigator.canShare({ files: [photoFile()] });
-    $('share').hidden = !canShare;
-  }, 'image/jpeg', 0.92);
-}
-
-function photoFile() {
-  const d = new Date(), p = n => String(n).padStart(2, '0');
-  const name = `photo-frame-${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}.jpg`;
-  return new File([photoBlob], name, { type: 'image/jpeg' });
-}
-
-$('start').addEventListener('click', () => startCamera(facing));
-video.addEventListener('loadedmetadata', updateShutter);
-
-$('shutter').addEventListener('click', () => {
-  $('flash').classList.add('on');
-  requestAnimationFrame(() => requestAnimationFrame(() => $('flash').classList.remove('on')));
-  capture();
-});
-
-$('flip').addEventListener('click', async () => {
-  $('flip').disabled = true;
-  await startCamera(facing === 'user' ? 'environment' : 'user');
-  $('flip').disabled = false;
-});
-
-$('retake').addEventListener('click', () => {
-  result.hidden = true;
-  $('resultControls').hidden = true;
-  $('hint').hidden = true;
-  $('cameraControls').hidden = false;
-  $('thumbs').hidden = FRAMES.length < 2;
-});
-
-$('save').addEventListener('click', () => {
-  const a = document.createElement('a');
-  a.href = photoUrl;
-  a.download = photoFile().name;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-});
-
-$('share').addEventListener('click', async () => {
-  try {
-    await navigator.share({ files: [photoFile()] });
-  } catch (err) {
-    if (err.name !== 'AbortError') $('hint').textContent = '共有できませんでした。「保存」をお試しください';
-  }
-});
-
-FRAMES.forEach((f, i) => {
-  const b = document.createElement('button');
-  b.style.backgroundImage = `url("${f.src}")`;
-  b.setAttribute('aria-label', f.name);
-  b.addEventListener('click', () => selectFrame(i));
-  $('thumbs').appendChild(b);
-});
-selectFrame(0);
-</script>
 </body>
 </html>
